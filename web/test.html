@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>API测试</title></head>
+<body>
+<h1>EDC API 测试</h1>
+<div id="result" style="font-family:monospace;white-space:pre;padding:20px;background:#f5f5f5;">测试中...</div>
+<script>
+async function test() {
+    const el = document.getElementById('result');
+    const API = 'http://localhost:5000/api';
+    try {
+        el.textContent = '正在请求 ' + API + '/dashboard ...';
+        const r = await fetch(API + '/dashboard');
+        const d = await r.json();
+        el.textContent = '✅ Dashboard OK!\n' +
+            '今日就诊: ' + (d.stats?.total_visits_today || 0) + '\n' +
+            '在诊患者: ' + (d.active_visits?.length || 0) + ' 人\n\n' +
+            JSON.stringify(d.stats, null, 2).substring(0, 500);
+    } catch(e) {
+        el.textContent = '❌ 错误: ' + e.message;
+    }
+}
+test();
+</script>
+</body>
+</html>
